@@ -1,4 +1,6 @@
 import pandas as pd
+from sklearn.preprocessing import LabelEncoder
+from sklearn.cluster import KMeans
 
 
 def load_data(path):
@@ -9,7 +11,12 @@ def load_data(path):
 
 def main():
     data = load_data("iris.data")
-    print(data.iloc[:, :-1].values) # wszystkie wiersze i kolumny oprócz ostatniej
+    x = data.iloc[:, :-1].values # wszystkie wiersze i kolumny oprócz ostatniej
 
+    le = LabelEncoder()
+    y = le.fit_transform(data['species'])
+
+    print(x)
+    print(y)
     
 main()
