@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.cluster import KMeans
+import numpy as np
 
 
 def load_data(path):
@@ -16,7 +17,18 @@ def main():
     le = LabelEncoder()
     y = le.fit_transform(data['species'])
 
-    print(x)
-    print(y)
-    
+    kmeans = KMeans(n_clusters=3, random_state=0)
+    kmeans.fit(x)
+    clusters = kmeans.labels_
+
+    new_labels = np.zeros_like(clusters) # tablica zer
+    for i in range(3):
+        mask = (clusters == i) 
+        chosen_labels = y[mask] 
+        dominant_label = np.bincount(chosen_labels).argmax()
+        new_labels[mask] = dominant_label
+
+    print(new_labels)
+
+
 main()
