@@ -22,25 +22,33 @@ def print_metrics(y, new_labels):
     print(f"Macierz pomyłek:\n{confusion_matrix(y, new_labels)}")
 
 
-def visualize_clusters(x, labels):
+def visualize_clusters_TSNE(x, labels):
     tsne = TSNE(n_components=2, random_state=0)
     x_2d = tsne.fit_transform(x)
 
-    plt.scatter(x_2d[:, 0], x_2d[:, 1], c=labels, cmap='viridis')
+    scatter = plt.scatter(x_2d[:, 0], x_2d[:, 1], c=labels, cmap='viridis')
     plt.title("Wizualizacja grupowania K-means za pomocą t-SNE")
     plt.xlabel("TSNE wymiar 1")
     plt.ylabel("TSNE wymiar 2")
-    plt.colorbar()
+    species_labels = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
+    plt.legend(handles=scatter.legend_elements()[0], labels=species_labels, title="Gatunki")
+    plt.savefig("./images/wykres_tsne.png", dpi=300, bbox_inches='tight')
     plt.show()
 
 
-def main():
-    data = load_data("iris.data")
+def visualize_1d_clusters(x, labels, characteristic):
+    scatter = plt.scatter(x, np.zeros_like(x), c=labels, cmap='viridis', alpha=0.6)
+    plt.title(f"Wizualizacja grupowania K-means dla {characteristic}")
+    plt.xlabel(f"Wartość {characteristic} [cm]")
+    plt.yticks([])
+    species_labels = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
+    plt.legend(handles=scatter.legend_elements()[0], labels=species_labels, title="Gatunki")
+    plt.savefig(f"./images/wykres_1d_{characteristic}.png", dpi=300, bbox_inches='tight')
+    plt.show()
 
-    x = data.iloc[:, :-1].values
-    le = LabelEncoder()
-    y = le.fit_transform(data['species'])
 
+def clustering(x, y, title):
+    print(f"\n===[ GRUPOWANIE DLA: {title} ]===")
     # algorytm k-means
     kmeans = KMeans(n_clusters=3, random_state=0)
     kmeans.fit(x)
@@ -54,9 +62,27 @@ def main():
         dominant_label = np.bincount(chosen_labels).argmax()
         new_labels[mask] = dominant_label
 
-    # metryki i wizualizacja
-    print_metrics(y, new_labels)
-    visualize_clusters(x, new_labels)
+    return new_labels
+
+
+def main():
+    data = load_data("iris.data")
+    le = LabelEncoder()
+    y = le.fit_transform(data['species'])
+
+    # WSZYSTKIE CECHY
+    x_all = data.iloc[:, :-1].values
+    labels_all = clustering(x_all, y, "WSZYSTKIE CECHY")
+    print_metrics(y, labels_all)
+    visualize_clusters_TSNE(x_all, labels_all)
+
+    # POJEDYNCZE CECHY
+    characteristics = ['sepal_length', 'sepal_width', 'petal_length', 'petal_width']
+    for characteristic in characteristics:
+        x_1d = data[[characteristic]].values
+        labels_1d = clustering(x_1d, y, characteristic)
+        print_metrics(y, labels_1d)
+        visualize_1d_clusters(x_1d, labels_1d, characteristic)
 
 
 main()
