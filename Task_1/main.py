@@ -3,6 +3,8 @@ import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from sklearn.cluster import KMeans
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
 
 
 def load_data(path):
@@ -20,27 +22,41 @@ def print_metrics(y, new_labels):
     print(f"Macierz pomyłek:\n{confusion_matrix(y, new_labels)}")
 
 
+def visualize_clusters(x, labels):
+    tsne = TSNE(n_components=2, random_state=0)
+    x_2d = tsne.fit_transform(x)
+
+    plt.scatter(x_2d[:, 0], x_2d[:, 1], c=labels, cmap='viridis')
+    plt.title("Wizualizacja grupowania K-means za pomocą t-SNE")
+    plt.xlabel("TSNE wymiar 1")
+    plt.ylabel("TSNE wymiar 2")
+    plt.colorbar()
+    plt.show()
+
+
 def main():
     data = load_data("iris.data")
-    x = data.iloc[:, :-1].values
 
+    x = data.iloc[:, :-1].values
     le = LabelEncoder()
     y = le.fit_transform(data['species'])
 
-    # Algorytm k-means
+    # algorytm k-means
     kmeans = KMeans(n_clusters=3, random_state=0)
     kmeans.fit(x)
-    clusters = kmeans.labels_ 
+    labels = kmeans.labels_ 
 
     # dopasowanie klas otrzymanych w k-means do rzeczywistych
-    new_labels = np.zeros_like(clusters)
+    new_labels = np.zeros_like(labels)
     for i in range(3):
-        mask = (clusters == i) 
+        mask = (labels == i)
         chosen_labels = y[mask] 
         dominant_label = np.bincount(chosen_labels).argmax()
         new_labels[mask] = dominant_label
 
+    # metryki i wizualizacja
     print_metrics(y, new_labels)
+    visualize_clusters(x, new_labels)
 
 
 main()
