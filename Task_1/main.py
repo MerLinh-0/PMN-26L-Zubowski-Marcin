@@ -32,7 +32,7 @@ def visualize_clusters_TSNE(x, labels):
     plt.ylabel("TSNE wymiar 2")
     species_labels = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
     plt.legend(handles=scatter.legend_elements()[0], labels=species_labels, title="Gatunki")
-    plt.savefig("./images/wykres_tsne.png", dpi=300, bbox_inches='tight')
+    # plt.savefig("./images/wykres_tsne.png", dpi=300, bbox_inches='tight')
     plt.show()
 
 
@@ -43,7 +43,7 @@ def visualize_1d_clusters(x, labels, characteristic):
     plt.yticks([])
     species_labels = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
     plt.legend(handles=scatter.legend_elements()[0], labels=species_labels, title="Gatunki")
-    plt.savefig(f"./images/wykres_1d_{characteristic}.png", dpi=300, bbox_inches='tight')
+    # plt.savefig(f"./images/wykres_1d_{characteristic}.png", dpi=300, bbox_inches='tight')
     plt.show()
 
 
