@@ -22,9 +22,20 @@ def get_clean_data():
     return X, y
 
 
+def visualize_features(X, y):
+    df = pd.concat([X, y], axis=1)
+    fig = plt.figure(figsize=(8, 8))
+    ax = fig.gca()
+    df.hist(ax=ax, bins=15, edgecolor='black', color='skyblue', grid=False)
+    plt.suptitle('Distribution of features in Heart Disease dataset', fontsize=14, y=1.02)
+    plt.tight_layout()
+    plt.show()
+    
+
 def main():
     X, y = get_clean_data()
     print(f"Dataset shape: {X.shape}, Target distribution:\n{y.value_counts()}")
+    visualize_features(X, y)
 
 
 main()
