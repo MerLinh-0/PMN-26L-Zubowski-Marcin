@@ -3,8 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from ucimlrepo import fetch_ucirepo 
+from logistic_regression_model import train_logistic_regression
 
-
+# Data loading and cleaning to prepare the dataset for analysis and modeling
 def get_clean_data():
     heart_disease = fetch_ucirepo(id=45)
     X_raw = heart_disease.data.features
@@ -42,6 +43,7 @@ def main():
     print(f"Dataset shape: {X.shape}, Target distribution:\n{y.value_counts()}")
     # visualize_features(X, y)
     # statistics(X)
+    train_logistic_regression(X, y)
 
 
 main()
