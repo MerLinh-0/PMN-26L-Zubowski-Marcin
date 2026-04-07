@@ -1,9 +1,7 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
 from ucimlrepo import fetch_ucirepo 
 from logistic_regression_model import train_logistic_regression
+from visualization import visualize_features, visualize_weights
 
 # Data loading and cleaning to prepare the dataset for analysis and modeling
 def get_clean_data():
@@ -22,16 +20,6 @@ def get_clean_data():
 
     return X, y
 
-# Basic data exploration and visualization for each feature in the dataset.
-def visualize_features(X, y):
-    df = pd.concat([X, y], axis=1)
-    fig = plt.figure(figsize=(8, 8))
-    ax = fig.gca()
-    df.hist(ax=ax, bins=15, edgecolor='black', color='skyblue', grid=False)
-    plt.suptitle('Distribution of features in Heart Disease dataset', fontsize=14, y=1.02)
-    plt.tight_layout()
-    plt.show()
-
 
 def statistics(X):
     for col in X.columns:
@@ -43,7 +31,7 @@ def main():
     print(f"Dataset shape: {X.shape}, Target distribution:\n{y.value_counts()}")
     # visualize_features(X, y)
     # statistics(X)
-    train_logistic_regression(X, y)
-
+    model = train_logistic_regression(X, y)
+    visualize_weights(model, X)
 
 main()
