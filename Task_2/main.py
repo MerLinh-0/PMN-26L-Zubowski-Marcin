@@ -1,7 +1,7 @@
 import pandas as pd
 from ucimlrepo import fetch_ucirepo 
 from logistic_regression_model import train_logistic_regression
-from visualization import visualize_features, visualize_weights
+from visualization import visualize_features, visualize_weights, visualize_decision_boundary
 
 # Data loading and cleaning to prepare the dataset for analysis and modeling
 def get_clean_data():
@@ -31,7 +31,9 @@ def main():
     print(f"Dataset shape: {X.shape}, Target distribution:\n{y.value_counts()}")
     # visualize_features(X, y)
     # statistics(X)
-    model = train_logistic_regression(X, y)
-    visualize_weights(model, X)
+    model= train_logistic_regression(X, y)
+    visualize_weights(model[0], X)
+    visualize_decision_boundary(X, y)
+
 
 main()
