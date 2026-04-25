@@ -30,10 +30,8 @@ def visualize_weights(model, X):
     plt.show()
 
 
-def visualize_decision_boundary(X, y):
-    feature_names = ["age", "thalach"]
-
-    model_2d, scaler_2d, X_train_2d, X_test_2d, y_train_2d, y_test_2d = train_logistic_regression(X, y, selected_features=feature_names)
+def visualize_decision_boundary(X, y, features):
+    model_2d, scaler_2d, X_train_2d, X_test_2d, y_train_2d, y_test_2d = train_logistic_regression(X, y, selected_features=features)
 
     def plot_decision_boundary(model, X_scaled, y_true, title, ax):
         h = 0.05
@@ -53,8 +51,8 @@ def visualize_decision_boundary(X, y):
             ax.scatter(X_scaled[mask, 0], X_scaled[mask, 1], c=color, marker=marker,
                        edgecolors='k', linewidths=0.5, alpha=0.9, label=name, s=50)
 
-        ax.set_xlabel(f"{feature_names[0]}")
-        ax.set_ylabel(f"{feature_names[1]}")
+        ax.set_xlabel(f"{features[0]}")
+        ax.set_ylabel(f"{features[1]}")
         ax.set_title(title, fontsize=12)
         ax.legend(loc='upper right')
     
@@ -63,14 +61,14 @@ def visualize_decision_boundary(X, y):
     plot_decision_boundary(model_2d, X_train_2d, y_train_2d, "Decision Boundary on Training Set", axes[0])
     plot_decision_boundary(model_2d, X_test_2d, y_test_2d, "Decision Boundary on Test Set", axes[1])
 
-    plt.suptitle("Logistic Regression Decision Boundary (ca vs thalach)", fontsize=16)
+    plt.suptitle(f"Logistic Regression Decision Boundary ({features[0]} vs {features[1]})", fontsize=16)
     plt.tight_layout()
     plt.show()
 
 
 def visualize_raport(model, X_test_scaled, y_test):
     y_pred = model.predict(X_test_scaled)
-    print("Classification Report:")
+    print("\n=== Classification Report ===")
     print(classification_report(y_test, y_pred, target_names=['Healthy (0)', 'Sick (1)']))
     
     cm = confusion_matrix(y_test, y_pred)

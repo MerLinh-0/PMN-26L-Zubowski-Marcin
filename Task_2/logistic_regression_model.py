@@ -25,5 +25,5 @@ def train_logistic_regression(X, y, selected_features=None):
     y_pred = model.predict(X_test_scaled) 
     accuracy = accuracy_score(y_test, y_pred)
     print(f"Logistic Regression Accuracy: {accuracy:.2f}")
-    print(f"Best Parameters: {grid_search.best_params_["C"]}")
+    print(f"Best C Parameter: {grid_search.best_params_["C"]}")
     return model, scaler, X_train_scaled, X_test_scaled, y_train, y_test
