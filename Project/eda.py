@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -5,7 +7,8 @@ from visualization import visualize_categorical_feature_distributions, visualize
 
 
 def load_data():
-    data = pd.read_csv('banking_transactions.csv')
+    data_path = Path(__file__).with_name("banking_transactions.csv")
+    data = pd.read_csv(data_path)
     if 'transaction_id' in data.columns:
         data = data.drop('transaction_id', axis=1) # transaction_id to unikalny identyfikator i nie wnosi wartości do analizy
 
